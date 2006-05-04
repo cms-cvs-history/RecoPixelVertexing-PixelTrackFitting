@@ -13,7 +13,7 @@
 <use name=RecoTracker/TkHitPairs>
 <use name=RecoTracker/TkTrackingRegions>
 <use name=RecoPixelVertexing/PixelTriplets>
-<use name=RecoPixelVertexing/PixelTrackFitting>
+<use name=RecoPixelVertexing/PixelPixelTrackFitting>
 
 
 
