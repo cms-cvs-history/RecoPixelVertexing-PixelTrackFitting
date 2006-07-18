@@ -37,7 +37,7 @@ public:
 private:
   void myprint(const reco::Track & track) const;
   string collectionLabel;
-  TH1D * hDphi, *hDeta, *hz, *hNrec, *hNgen;
+  TH1D * hDphi, *hDeta, *hz, *hNrec, *hNgen, *hNghost, *hNfake;
   TProfile * hPtRecVsGen;
   TFile * rootFile;
 };
@@ -49,12 +49,14 @@ PixelTrackAnalysis::PixelTrackAnalysis(const edm::ParameterSet& conf)
 
   rootFile = new TFile("analysis.root","RECREATE");
 
-  hDphi = new TH1D("hDphi","hDphi",100,-0.3, 0.3);
-  hDeta = new TH1D("hDeta","hDeta",100,-0.3,0.3);
-  hz   = new TH1D("hz","hz",100,-0.5,0.5);
-  hPtRecVsGen = new TProfile("hPtRecVsGen","hPtRecVsGen",15,0.,15.,"s");
-  hNrec = new TH1D("hNrec","hNrec",15,0.,15.);
-  hNgen = new TH1D("hNgen","hNgen",15,0.,15.);
+  hDphi = new TH1D("hDphi","hDphi",100,-0.1, 0.1);
+  hDeta = new TH1D("hDeta","hDeta",100,-0.1,0.1);
+  hz   = new TH1D("hz","hz",100,-0.25,0.25);
+  hPtRecVsGen = new TProfile("hPtRecVsGen","hPtRecVsGen",10,0.5,10.5);
+  hNrec = new TH1D("hNrec","hNrec",12,0.,12.);
+  hNgen = new TH1D("hNgen","hNgen",12,0.,12.);
+  hNghost = new TH1D("hNghost","hNghost",12,0.,12.);
+  hNfake = new TH1D("hNfake","hNfake",12,0.,12.);
 }
 
 PixelTrackAnalysis::~PixelTrackAnalysis()
@@ -84,37 +86,56 @@ void PixelTrackAnalysis::analyze(
 
   int Ngen = 0;
   int Nrec = 0;
+  int Nghost = 0;
   for ( HepMC::GenEvent::particle_iterator p = myGenEvent->particles_begin();
        p != myGenEvent->particles_end(); ++p ) {
 
-    if ( abs((*p)->pdg_id()) == 13 && (*p)->momentum().perp() > 1.0 ) { 
-      Ngen++;
-      bool isReconstructed = false;
-      float phi_mc = (*p)->momentum().phi();
-      float pt_gen = (*p)->momentum().perp();
-      float eta_gen = (*p)->momentum().eta(); 
-      for (IT it=tracks.begin(); it!=tracks.end(); it++) {
-        float phi_rec = (*it).momentum().phi();
-        float eta_rec = (*it).momentum().eta();
-        float pt_rec = (*it).pt();
-        float dphi = phi_mc - phi_rec;
-        float deta = eta_rec - eta_gen;
-        if (fabs(deta) < 0.3)  hDphi->Fill(dphi);
-        if (fabs(dphi) < 0.3)  hDeta->Fill(deta);
-        if (fabs(deta) < 0.1 && fabs(dphi) < 0.1)  {
-          hPtRecVsGen->Fill(pt_gen,pt_rec); 
-          isReconstructed = true;
-        }
+    if ( abs((*p)->pdg_id()) != 13) continue; 
+    Ngen++;
+    bool isReconstructed = false;
+    float phi_mc = (*p)->momentum().phi();
+    float pt_gen = (*p)->momentum().perp();
+    float eta_gen = (*p)->momentum().eta(); 
+    for (IT it=tracks.begin(); it!=tracks.end(); it++) {
+      float phi_rec = (*it).momentum().phi();
+      float eta_rec = (*it).momentum().eta();
+      float pt_rec = (*it).pt();
+      float dphi = phi_mc - phi_rec;
+      float deta = eta_rec - eta_gen;
+      if (fabs(deta) < 0.3)  hDphi->Fill(dphi);
+      if (fabs(dphi) < 0.3)  hDeta->Fill(deta);
+      if (fabs(deta) < 0.03 && fabs(dphi) < 0.06)  {
+        hPtRecVsGen->Fill(pt_gen,pt_rec); 
+        if (isReconstructed) Nghost++;
+        isReconstructed = true;
       }
-      if (isReconstructed) Nrec++;
     }
+    if (isReconstructed) Nrec++;
   }
   hNgen->Fill(Ngen);
   hNrec->Fill(Nrec);
-
+  hNghost->Fill(Nghost);
+   
+  int Nfake = 0;
   for (IT it=tracks.begin(); it!=tracks.end(); it++) {
-     hz->Fill((*it).vertex().z());
+    hz->Fill((*it).vertex().z());
+    bool isFake = true;
+    float phi_rec = (*it).momentum().phi();
+    float eta_rec = (*it).momentum().eta();
+    for ( HepMC::GenEvent::particle_iterator p = myGenEvent->particles_begin();
+       p != myGenEvent->particles_end(); ++p ) {
+
+      float phi_mc = (*p)->momentum().phi();
+      float eta_gen = (*p)->momentum().eta(); 
+      float dphi = phi_mc - phi_rec;
+      float deta = eta_rec - eta_gen;
+
+      if (fabs(deta) < 0.03 && fabs(dphi) < 0.06)  isFake = false;
+    }
+    if (isFake) Nfake++;
   }
+  hNfake->Fill(Nfake);
+
   delete myGenEvent;
 
 
