@@ -20,9 +20,8 @@ using namespace std;
 using namespace edm;
 
 #include "TFile.h"
-#include "TH1.h"
 #include "TH1D.h"
-#include "TROOT.h"
+#include "TProfile.h"
 
    
 
@@ -38,7 +37,8 @@ public:
 private:
   void myprint(const reco::Track & track) const;
   string collectionLabel;
-  TH1D * myHisto;
+  TH1D * hDphi, *hDeta, *hz, *hNrec, *hNgen;
+  TProfile * hPtRecVsGen;
   TFile * rootFile;
 };
 
@@ -46,8 +46,15 @@ PixelTrackAnalysis::PixelTrackAnalysis(const edm::ParameterSet& conf)
 {
   collectionLabel = conf.getParameter<std::string>("TrackCollection");
   edm::LogInfo("PixelTrackAnalysis")<<" CTOR";
+
   rootFile = new TFile("analysis.root","RECREATE");
-  myHisto = new TH1D("myHisto","myHisto",100,-6.3, 6.3);
+
+  hDphi = new TH1D("hDphi","hDphi",100,-0.3, 0.3);
+  hDeta = new TH1D("hDeta","hDeta",100,-0.3,0.3);
+  hz   = new TH1D("hz","hz",100,-0.5,0.5);
+  hPtRecVsGen = new TProfile("hPtRecVsGen","hPtRecVsGen",15,0.,15.,"s");
+  hNrec = new TH1D("hNrec","hNrec",15,0.,15.);
+  hNgen = new TH1D("hNgen","hNgen",15,0.,15.);
 }
 
 PixelTrackAnalysis::~PixelTrackAnalysis()
@@ -72,28 +79,44 @@ void PixelTrackAnalysis::analyze(
 
   HepMC::GenEvent * myGenEvent = new  HepMC::GenEvent(*(mcsource->GetEvent()));
 
-  float phi_mc = 0;
+  const reco::TrackCollection tracks = *(trackCollection.product());
+  cout << "Number of tracks: "<< tracks.size() << " tracks" << std::endl;
+
+  int Ngen = 0;
+  int Nrec = 0;
   for ( HepMC::GenEvent::particle_iterator p = myGenEvent->particles_begin();
        p != myGenEvent->particles_end(); ++p ) {
 
-      std::cout << " HERE !!!!" << std::endl;
-
-      if ( abs((*p)->pdg_id()) == 13
-           && (*p)->momentum().perp() > 5.0 ) { 
-        phi_mc = (*p)->momentum().phi();
+    if ( abs((*p)->pdg_id()) == 13 && (*p)->momentum().perp() > 1.0 ) { 
+      Ngen++;
+      bool isReconstructed = false;
+      float phi_mc = (*p)->momentum().phi();
+      float pt_gen = (*p)->momentum().perp();
+      float eta_gen = (*p)->momentum().eta(); 
+      for (IT it=tracks.begin(); it!=tracks.end(); it++) {
+        float phi_rec = (*it).momentum().phi();
+        float eta_rec = (*it).momentum().eta();
+        float pt_rec = (*it).pt();
+        float dphi = phi_mc - phi_rec;
+        float deta = eta_rec - eta_gen;
+        if (fabs(deta) < 0.3)  hDphi->Fill(dphi);
+        if (fabs(dphi) < 0.3)  hDeta->Fill(deta);
+        if (fabs(deta) < 0.1 && fabs(dphi) < 0.1)  {
+          hPtRecVsGen->Fill(pt_gen,pt_rec); 
+          isReconstructed = true;
+        }
       }
-
+      if (isReconstructed) Nrec++;
     }
+  }
+  hNgen->Fill(Ngen);
+  hNrec->Fill(Nrec);
 
+  for (IT it=tracks.begin(); it!=tracks.end(); it++) {
+     hz->Fill((*it).vertex().z());
+  }
   delete myGenEvent;
 
-  const reco::TrackCollection tracks = *(trackCollection.product());
-  cout << "Number of tracks: "<< tracks.size() << " tracks" << std::endl;
-  for (IT it=tracks.begin(); it!=tracks.end(); it++) {
-    float phi_rec = (*it).momentum().phi();
-    float dphi = phi_mc - phi_rec;
-    myHisto->Fill(dphi); 
-  }
 
   cout <<"------------------------------------------------"<<endl;
 }

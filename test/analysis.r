@@ -6,11 +6,28 @@
   TFile file("analysis.root");
   file.ls();
 
-  c = new TCanvas("c","c",-2);
-  myHisto.SetTitle("10GeV muons, charge -1");
-  myHisto.SetYTitle("arbitrary");
-  myHisto.SetXTitle("Delta phi (MC-REC) [rad]");
-  myHisto.DrawCopy();
-  c.Print(0,"eps");
+  cDphi = new TCanvas("cDphi","cDphi",-2);
+  hDphi.SetYTitle("arbitrary");
+  hDphi.SetXTitle("Delta phi (MC-REC) [rad]");
+  hDphi.DrawCopy();
+  cDphi.Print(0,".jpg");
+
+  cDeta = new TCanvas("cDeta","cDeta",-2);
+  hDeta.SetYTitle("arbitrary");
+  hDeta.SetXTitle("Delta eta (MC-REC) [1]");
+  hDeta.DrawCopy();
+  cDeta.Print(0,".jpg");
+
+  cz = new TCanvas("cz","cz",-2);
+  hz.SetYTitle("arbitrary");
+  hz.SetXTitle("z of track IP [cm]");
+  hz.DrawCopy();
+  cz.Print(0,".jpg");
+
+  cPtRecVsGen = new TCanvas("cPtRecVsGen","cPtRecVsGen",-2);
+  hPtRecVsGen.SetYTitle(" pT reconstructed");
+  hPtRecVsGen.SetXTitle(" pT reconstructed");
+  hPtRecVsGen.DrawCopy();
+  cPtRecVsGen.Print(0,".jpg");
 
 }
