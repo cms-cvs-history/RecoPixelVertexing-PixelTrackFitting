@@ -1,13 +1,20 @@
+  # Magntic field
   include "MagneticField/Engine/data/volumeBasedMagneticField.cfi"
+
+  # Geometry (all CMS)
   include "Geometry/CMSCommonData/data/cmsIdealGeometryXML.cfi"
 
+  # Tracker Geometry Builder
+  include "Geometry/TrackerGeometryBuilder/data/trackerGeometry.cfi"
+
+  # Tracker Numbering Builder
+  include "Geometry/TrackerNumberingBuilder/data/trackerNumberingGeometry.cfi"
+  # Reco geometry 
   include "RecoTracker/GeometryESProducer/data/TrackerRecoGeometryESProducer.cfi"
+  # for Transient rechits?
   include "RecoLocalTracker/SiStripRecHitConverter/data/StripCPEfromTrackAngle.cfi"
   include "RecoLocalTracker/SiPixelRecHits/data/PixelCPEParmError.cfi"
   include "RecoTracker/TransientTrackingRecHit/data/TransientTrackingRecHitBuilder.cfi"
-
-  es_module = TrackerGeometricDetESModule {}
-  es_module = TrackerDigiGeometryESModule {}
 
   es_module = PixelFitterByConformalMappingAndLineESProducer{ }
   es_module = PixelFitterByHelixProjectionsESProducer{ }
