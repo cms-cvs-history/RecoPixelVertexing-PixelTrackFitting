@@ -19,4 +19,4 @@
   es_module = PixelFitterByConformalMappingAndLineESProducer{ }
   es_module = PixelFitterByHelixProjectionsESProducer{ }
 
-  include "RecoPixelVertexing/PixelVertexFinding/data/PixelTracks.cfi"
+  include "RecoPixelVertexing/PixelTrackFitting/data/PixelTracks.cfi"
