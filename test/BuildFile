@@ -44,3 +44,32 @@
 <flags SEAL_PLUGIN_NAME="PixelTrackAnalysis">
 </library>
 
+
+
+<use name=boost>
+<use name=root>
+
+<use name=FWCore/Framework>
+<use name=Foundation/PluginManager>
+<use name=FWCore/ParameterSet>
+
+<use name=Geometry/Records>
+<use name=Geometry/CommonDetUnit>
+<use name=Geometry/TrackerGeometryBuilder>
+
+<use name=DataFormats/Common>
+<use name=DataFormats/TrackerRecHit2D>
+<use name=RecoTracker/TkHitPairs>
+<use name=RecoTracker/TkTrackingRegions>
+<use name=RecoPixelVertexing/PixelTriplets>
+<use name=RecoPixelVertexing/PixelTrackFitting>
+<use name=RecoLocalTracker/SiPixelRecHits>
+<use name=SimTracker/TrackerHitAssociation>
+
+<use name=SimGeneral/HepPDT>
+<use name=SimDataFormats/HepMCProduct>
+
+<flags SEAL_PLUGIN_NAME="AdvancePixelTrackTest">
+<library file="AdvancePixelTrackTest.cc" name="AdvancePixelTrackTest">
+</library>
+
