@@ -81,7 +81,7 @@ private:
   void analyzeSimTrack(SimTrack track, int type);
   void analyzeMC();
   void analyzeHitPattern(const reco::Track & track);
-  bool TrackIsValid(SimTrack track);
+  bool trackIsValid(SimTrack track);
   double minDr(SimTrack track);
 
   const HepMC::GenEvent *mcEvent;
@@ -260,7 +260,7 @@ void AdvancedPixelTrackTest::analyze(const Event& event, const EventSetup& event
   for (int i = 0; i < nAllSimTracks; i++)
   {
     SimTrack simTrack = (*simTracks.product())[i];
-    if (TrackIsValid(simTrack))
+    if (trackIsValid(simTrack))
     {
       nSimTracks++;
       analyzeSimTrack(simTrack, SIM);
@@ -287,7 +287,7 @@ void AdvancedPixelTrackTest::analyze(const Event& event, const EventSetup& event
   for (int i = 0; i < nAllSimTracks; i++)
   {
     SimTrack simTrack = (*simTracks.product())[i];
-    if (TrackIsValid(simTrack))
+    if (trackIsValid(simTrack))
     {
       hSimTrackMatchesFilt->Fill(simTrackMatches[i]);
       if (simTrackMatches[i] == 0) analyzeSimTrack(simTrack, NOTRECFILT);
@@ -313,7 +313,7 @@ void AdvancedPixelTrackTest::analyze(const Event& event, const EventSetup& event
 }
 
 
-bool AdvancedPixelTrackTest::TrackIsValid(SimTrack track)
+bool AdvancedPixelTrackTest::trackIsValid(SimTrack track)
 {
     const double ptMin = 1.;
     const double etaMax = 2.5;
@@ -373,7 +373,7 @@ double AdvancedPixelTrackTest::minDr(SimTrack track)
   for (int i = 0; i < (int)simTracks.product()->size(); i++)
   {
     SimTrack simTrack = (*simTracks.product())[i];
-    if (TrackIsValid(simTrack))
+    if (trackIsValid(simTrack))
     {
       HepMC::GenParticle* particle2 = mcEvent->particle(simTrack.genpartIndex());
       double dr = particle2->Momentum().deltaR(particle->Momentum());
@@ -434,7 +434,7 @@ int AdvancedPixelTrackTest::matchRecTrack(const reco::Track & track, RecHits rec
       }
 
       int id = closestSimHit.trackId() - 1;
-      if ((id < (int)simTracks.product()->size()) && (TrackIsValid((*simTracks.product())[id]))) simRecHitsMatches[id]++;  //simTracks from mc are first in the array
+      if ((id < (int)simTracks.product()->size()) && (trackIsValid((*simTracks.product())[id]))) simRecHitsMatches[id]++;  //simTracks from mc are first in the array
     }
   }
   int bestTrack = -1, maxRecHits = 1;  //require at least two matches to the same track
