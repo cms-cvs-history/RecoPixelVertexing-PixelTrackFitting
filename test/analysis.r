@@ -10,19 +10,19 @@
   hDphi.SetYTitle("arbitrary");
   hDphi.SetXTitle("Delta phi (MC-REC) [rad]");
   hDphi.DrawCopy();
-  cDphi.Print(0,".jpg");
+  cDphi.Print(0,".eps");
 
   cDeta = new TCanvas("cDeta","cDeta",-1);
   hDeta.SetYTitle("arbitrary");
   hDeta.SetXTitle("Delta eta (MC-REC) [1]");
   hDeta.DrawCopy();
-  cDeta.Print(0,".jpg");
+  cDeta.Print(0,".eps");
 
   cz = new TCanvas("cz","cz",-1);
   hz.SetYTitle("arbitrary");
   hz.SetXTitle("z of track IP [cm]");
   hz.DrawCopy();
-  cz.Print(0,".jpg");
+  cz.Print(0,".eps");
 
   cPtRecVsGen = new TCanvas("cPtRecVsGen","cPtRecVsGen",-2);
   hPtRecVsGen.SetYTitle(" pT reconstructed");
@@ -31,7 +31,7 @@
   hPtRecVsGen.SetMinimum(0.);
   hPtRecVsGen.SetStats(0);
   hPtRecVsGen.DrawCopy();
-  cPtRecVsGen.Print(0,".jpg");
+  cPtRecVsGen.Print(0,".eps");
 
   cCounters = new TCanvas("cCounters","cCounters",-1);
   hNgen->SetStats(0);
@@ -51,6 +51,9 @@
   legend.AddEntry(hNghost,"ghosts (mirrors) av=0.35/muon");
   legend.AddEntry(hNfake,"fake");
   legend.Draw();
-  cCounters.Print(0,".jpg");
+  cCounters.Print(0,".eps");
     
+  cChi2 = new TCanvas("chi2","chi2",-1);
+  hChi2->DrawCopy();
+  cChi2.Print(0,".eps");
 }

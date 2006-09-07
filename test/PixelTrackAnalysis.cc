@@ -37,7 +37,7 @@ public:
 private:
   void myprint(const reco::Track & track) const;
   string collectionLabel;
-  TH1D * hDphi, *hDeta, *hz, *hNrec, *hNgen, *hNghost, *hNfake;
+  TH1D * hDphi, *hDeta, *hz, *hNrec, *hNgen, *hNghost, *hNfake, *hChi2;
   TProfile * hPtRecVsGen;
   TFile * rootFile;
 };
@@ -57,6 +57,7 @@ PixelTrackAnalysis::PixelTrackAnalysis(const edm::ParameterSet& conf)
   hNgen = new TH1D("hNgen","hNgen",12,0.,12.);
   hNghost = new TH1D("hNghost","hNghost",12,0.,12.);
   hNfake = new TH1D("hNfake","hNfake",12,0.,12.);
+  hChi2 = new TH1D("hChi2","hChi2",50,0.,10.);
 }
 
 PixelTrackAnalysis::~PixelTrackAnalysis()
@@ -100,6 +101,7 @@ void PixelTrackAnalysis::analyze(
       float phi_rec = (*it).momentum().phi();
       float eta_rec = (*it).momentum().eta();
       float pt_rec = (*it).pt();
+      float chi2   = (*it).chi2();
       float dphi = phi_mc - phi_rec;
       float deta = eta_rec - eta_gen;
       if (fabs(deta) < 0.3)  hDphi->Fill(dphi);
@@ -107,6 +109,7 @@ void PixelTrackAnalysis::analyze(
       if (fabs(deta) < 0.03 && fabs(dphi) < 0.06)  {
         hPtRecVsGen->Fill(pt_gen,pt_rec); 
         if (isReconstructed) Nghost++;
+        hChi2->Fill(chi2);
         isReconstructed = true;
       }
     }
