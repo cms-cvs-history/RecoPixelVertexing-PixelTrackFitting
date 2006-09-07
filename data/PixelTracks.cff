@@ -9,12 +9,17 @@
 
   # Tracker Numbering Builder
   include "Geometry/TrackerNumberingBuilder/data/trackerNumberingGeometry.cfi"
+
   # Reco geometry 
   include "RecoTracker/GeometryESProducer/data/TrackerRecoGeometryESProducer.cfi"
+
   # for Transient rechits?
-  include "RecoLocalTracker/SiStripRecHitConverter/data/StripCPEfromTrackAngle.cfi"
   include "RecoLocalTracker/SiPixelRecHits/data/PixelCPEParmError.cfi"
   include "RecoTracker/TransientTrackingRecHit/data/TransientTrackingRecHitBuilder.cfi"
+  replace ttrhbwr.StripCPE = "Fake"
+  include "RecoTracker/TransientTrackingRecHit/data/TransientTrackingRecHitBuilderWithoutRefit.cfi"
+
+
 
   es_module = PixelFitterByConformalMappingAndLineESProducer{ }
   es_module = PixelFitterByHelixProjectionsESProducer{ }
