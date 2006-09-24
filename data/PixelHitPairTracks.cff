@@ -21,12 +21,12 @@
 
 
 
-  es_module = PixelFitterByConformalMappingAndLineESProducer{ }
   es_module = PixelFitterByHelixProjectionsESProducer{ }
+
   es_module = PixelTrackFilterByKinematicsESProducer {
     double ptMin = 0.
     double tipMax = 1.0
     double chi2 = 1000.
   }
-  include "RecoPixelVertexing/PixelTrackFitting/data/PixelTracks.cfi"
+  include "RecoPixelVertexing/PixelTrackFitting/data/PixelHitPairTracks.cfi"
 

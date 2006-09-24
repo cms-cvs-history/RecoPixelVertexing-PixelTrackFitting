@@ -38,6 +38,7 @@ private:
   void myprint(const reco::Track & track) const;
   string collectionLabel;
   TH1D * hDphi, *hDeta, *hz, *hNrec, *hNgen, *hNghost, *hNfake, *hChi2;
+  TH1D *hPt, *hEffPt_N, *hEffPt_D, *hEffEta_N, *hEffEta_D;
   TProfile * hPtRecVsGen;
   TFile * rootFile;
 };
@@ -49,10 +50,15 @@ PixelTrackAnalysis::PixelTrackAnalysis(const edm::ParameterSet& conf)
 
   rootFile = new TFile("analysis.root","RECREATE");
 
-  hDphi = new TH1D("hDphi","hDphi",100,-0.1, 0.1);
-  hDeta = new TH1D("hDeta","hDeta",100,-0.1,0.1);
-  hz   = new TH1D("hz","hz",100,-0.25,0.25);
+  hDphi = new TH1D("hDphi","hDphi",100,-0.05, 0.05);
+  hDeta = new TH1D("hDeta","hDeta",100,-0.01,0.01);
+  hz   = new TH1D("hz","hz",50,-0.15,0.15);
+  hPt    = new TH1D("hPt","hPt",35,0.,35.);
   hPtRecVsGen = new TProfile("hPtRecVsGen","hPtRecVsGen",10,0.5,10.5);
+  hEffEta_N = new TH1D("hEffEta_N","hEffEta_N",50,-2.45,2.55);
+  hEffEta_D = new TH1D("hEffEta_D","hEffEta_D",50,-2.45,2.55);
+  hEffPt_N = new TH1D("hEffPt_N","hEffPt_N",10,0.5,10.5);
+  hEffPt_D = new TH1D("hEffPt_D","hEffPt_D",10,0.5,10.5);
   hNrec = new TH1D("hNrec","hNrec",12,0.,12.);
   hNgen = new TH1D("hNgen","hNgen",12,0.,12.);
   hNghost = new TH1D("hNghost","hNghost",12,0.,12.);
@@ -97,6 +103,8 @@ void PixelTrackAnalysis::analyze(
     float phi_mc = (*p)->momentum().phi();
     float pt_gen = (*p)->momentum().perp();
     float eta_gen = (*p)->momentum().eta(); 
+    if (fabs(eta_gen) < 2.1) hEffPt_D->Fill(pt_gen);
+    if (pt_gen >2.5) hEffEta_D->Fill(eta_gen);
     for (IT it=tracks.begin(); it!=tracks.end(); it++) {
       float phi_rec = (*it).momentum().phi();
       float eta_rec = (*it).momentum().eta();
@@ -110,6 +118,9 @@ void PixelTrackAnalysis::analyze(
         hPtRecVsGen->Fill(pt_gen,pt_rec); 
         if (isReconstructed) Nghost++;
         hChi2->Fill(chi2);
+        if (fabs(eta_gen) < 2.1) hEffPt_N->Fill(pt_gen);
+        if (pt_gen > 2.5) hEffEta_N->Fill(eta_gen);
+        hPt->Fill(pt_rec);
         isReconstructed = true;
       }
     }
