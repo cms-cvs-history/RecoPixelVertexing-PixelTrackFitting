@@ -10,4 +10,10 @@ module pixelTracks = PixelTrackProducer{
     double tipMax = 1.0
     double chi2 = 1000.
   }
+
+  PSet TripletsPSet = {
+    string Generator = "PixelTripletHLTGenerator"
+    PSet GeneratorPSet = {}
+  }
+ 
 }
