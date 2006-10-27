@@ -249,4 +249,4 @@ void PixelTrackAnalysis::analyze(
   cout <<"------------------------------------------------"<<endl;
 }
 
-DEFINE_FWK_MODULE(PixelTrackAnalysis)
+DEFINE_FWK_MODULE(PixelTrackAnalysis);
