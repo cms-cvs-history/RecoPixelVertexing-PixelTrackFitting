@@ -11,9 +11,20 @@ module pixelTracks = PixelTrackProducer{
     double chi2 = 1000.
   }
 
+  string Cleaner = "PixelTrackCleanerBySharedHits"
+  PSet   CleanerPSet = {}
+
   PSet TripletsPSet = {
     string Generator = "PixelTripletHLTGenerator"
     PSet GeneratorPSet = {}
+  }
+
+  PSet RegionPSet = {
+    double ptMin = 1.0 
+    double originRadius = 0.2
+    double originHalfLength = 15.0 
+    double originZPos = 0.0
+    bool precise = false
   }
  
 }
