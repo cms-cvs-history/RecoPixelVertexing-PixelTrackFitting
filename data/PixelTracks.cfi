@@ -1,5 +1,7 @@
 module pixelTracks = PixelTrackProducer{
 
+  InputTag HitCollectionLabel = siPixelRecHits
+
 # string Fitter = "PixelFitterByConformalMappingAndLine" 
   string Fitter = "PixelFitterByHelixProjections" 
   PSet   FitterPSet = {}
