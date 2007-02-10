@@ -20,8 +20,16 @@ module pixelTracks = PixelTrackProducer{
 
   PSet TripletsPSet = {
     string Generator = "PixelTripletHLTGenerator"
-    PSet GeneratorPSet = {}
+    PSet GeneratorPSet = {
+      bool useFixedPreFiltering = false
+      double phiPreFiltering = 0.3          # can be removed if !useFixedPreFiltering
+      double extraHitRZtolerance   = 0.06
+      double extraHitRPhitolerance = 0.06
+      bool useBending = true
+      bool useMultScattering = true
+    }
   }
+
 
   PSet RegionPSet = {
     double ptMin = 1.0 
