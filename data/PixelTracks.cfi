@@ -19,15 +19,8 @@ module pixelTracks = PixelTrackProducer{
   PSet   CleanerPSet = {}
 
   PSet TripletsPSet = {
-    string Generator = "PixelTripletHLTGenerator"
-    PSet GeneratorPSet = {
-      bool useFixedPreFiltering = false
-      double phiPreFiltering = 0.3          # can be removed if !useFixedPreFiltering
-      double extraHitRZtolerance   = 0.06
-      double extraHitRPhitolerance = 0.06
-      bool useBending = true
-      bool useMultScattering = true
-    }
+    include "RecoTracker/TkSeedingLayers/data/PixelLayerTriplets.cfi"
+    include "RecoPixelVertexing/PixelTriplets/data/PixelTripletHLTGenerator.cfi"
   }
 
 
