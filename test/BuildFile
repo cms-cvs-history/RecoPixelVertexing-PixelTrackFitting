@@ -2,7 +2,7 @@
 <use name=root>
 
 <use name=FWCore/Framework>
-<use name=Foundation/PluginManager>
+<use name=FWCore/PluginManager>
 <use name=FWCore/ParameterSet>
 
 <use name=Geometry/Records>
@@ -16,5 +16,5 @@
 <use name=RecoPixelVertexing/PixelTrackFitting>
 
 <library file="PixelTrackTest.cc" name="PixelTrackTest">
-<flags SEAL_PLUGIN_NAME="PixelTrackTest">
+<flags EDM_PLUGIN=1>
 </library>
