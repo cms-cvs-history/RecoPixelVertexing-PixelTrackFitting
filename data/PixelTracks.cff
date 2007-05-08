@@ -17,13 +17,9 @@
   include "RecoLocalTracker/SiPixelRecHits/data/PixelCPEParmError.cfi"
 
   # temporary fix for 14x, 13x
-  es_module ttrhb4GlobalPixelSeeds = ttrhbwr from "RecoTracker/TransientTrackingRecHit/data/TransientTrackingRecHitBuilder.cfi"
- replace ttrhb4GlobalPixelSeeds.StripCPE = "Fake"
- replace ttrhb4GlobalPixelSeeds.ComponentName = "TTRHBuilder4GlobalPixelSeeds"
-
   es_module ttrhb4PixelTriplets = ttrhbwr from "RecoTracker/TransientTrackingRecHit/data/TransientTrackingRecHitBuilder.cfi"
   replace ttrhb4PixelTriplets.StripCPE = "Fake"
-  replace ttrhb4PixelTriplets.ComponentName = "TTRHBuilder4PixelTriplets"
+  replace ttrhb4PixelTriplets.ComponentName = "PixelTTRHBuilderWithoutAngle"
 
 #  include "RecoTracker/TransientTrackingRecHit/data/TransientTrackingRecHitBuilderWithoutRefit.cfi"
 

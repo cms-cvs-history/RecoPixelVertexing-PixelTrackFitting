@@ -14,7 +14,7 @@ module pixelTracks = PixelTrackProducer{
   PSet   FitterPSet = {
     string ComponentName = "PixelFitterByHelixProjections"
 #   string ComponentName = "PixelFitterByConformalMappingAndLine" 
-    string TTRHBuilder = "TTRHBuilder4PixelTriplets"
+    string TTRHBuilder = "PixelTTRHBuilderWithoutAngle"
   }
 
   PSet   FilterPSet = {
