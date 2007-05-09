@@ -1,4 +1,4 @@
-module pixelTracks = PixelTrackProducer{
+module pixelTracks = PixelTrackProducer {
 
   PSet RegionFactoryPSet = {
     string ComponentName = "GlobalRegionProducer"
@@ -7,7 +7,7 @@ module pixelTracks = PixelTrackProducer{
 
   PSet OrderedHitsFactoryPSet = {
     string ComponentName = "StandardHitTripletGenerator"
-    include "RecoTracker/TkSeedingLayers/data/PixelLayerTriplets.cfi"
+    string SeedingLayers = "PixelLayerTriplets"
     include "RecoPixelVertexing/PixelTriplets/data/PixelTripletHLTGenerator.cfi"
   }
 
