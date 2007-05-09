@@ -18,7 +18,7 @@
 
   es_module ttrhb4PixelTriplets = ttrhbwr from "RecoTracker/TransientTrackingRecHit/data/TransientTrackingRecHitBuilder.cfi"
   replace ttrhb4PixelTriplets.StripCPE = "Fake"
-  replace ttrhb4PixelTriplets.ComponentName = "TTRHBuilder4PixelTriplets"
+  replace ttrhb4PixelTriplets.ComponentName = "PixelTTRHBuilderWithoutAngle"
 
 #  include "RecoTracker/TransientTrackingRecHit/data/TransientTrackingRecHitBuilderWithoutRefit.cfi"
 
