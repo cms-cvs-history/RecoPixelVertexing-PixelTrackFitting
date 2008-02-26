@@ -27,4 +27,5 @@ replace myTTRHBuilderWithoutAngle.StripCPE = "Fake"
 replace myTTRHBuilderWithoutAngle.ComponentName = "PixelTTRHBuilderWithoutAngle"
 
   include "RecoTracker/TkSeedingLayers/data/PixelLayerTriplets.cfi"
+  include "RecoTracker/TkSeedingLayers/data/TTRHBuilderWithoutAngle4PixelTriplets.cfi"
   include "RecoPixelVertexing/PixelTrackFitting/data/PixelTracks.cfi"
