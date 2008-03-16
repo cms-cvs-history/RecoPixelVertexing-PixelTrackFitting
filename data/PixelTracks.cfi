@@ -1,3 +1,5 @@
+include "RecoPixelVertexing/PixelTrackFitting/data/PixelFitterByHelixProjections.cfi"
+ 
 module pixelTracks = PixelTrackProducer {
 
   PSet RegionFactoryPSet = {
@@ -11,11 +13,7 @@ module pixelTracks = PixelTrackProducer {
     include "RecoPixelVertexing/PixelTriplets/data/PixelTripletHLTGenerator.cfi"
   }
 
-  PSet   FitterPSet = {
-    string ComponentName = "PixelFitterByHelixProjections"
-#   string ComponentName = "PixelFitterByConformalMappingAndLine" 
-    string TTRHBuilder = "PixelTTRHBuilderWithoutAngle"
-  }
+  PSet   FitterPSet = { using PixelFitterByHelixProjections }
 
   PSet   FilterPSet = {
     string ComponentName = "PixelTrackFilterByKinematics"

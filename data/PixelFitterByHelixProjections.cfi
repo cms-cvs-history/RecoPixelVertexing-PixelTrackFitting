@@ -1,0 +1,4 @@
+block PixelFitterByHelixProjections = {
+    string ComponentName = "PixelFitterByHelixProjections"
+    string TTRHBuilder = "PixelTTRHBuilderWithoutAngle"
+}
