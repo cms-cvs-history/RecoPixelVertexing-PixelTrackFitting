@@ -1,16 +1,18 @@
 include "RecoPixelVertexing/PixelTrackFitting/data/PixelFitterByHelixProjections.cfi"
+include "RecoTracker/TkTrackingRegions/data/GlobalTrackingRegion.cfi"
+include "RecoPixelVertexing/PixelTriplets/data/PixelTripletHLTGenerator.cfi"
  
 module pixelTracks = PixelTrackProducer {
 
   PSet RegionFactoryPSet = {
     string ComponentName = "GlobalRegionProducer"
-    include "RecoTracker/TkTrackingRegions/data/GlobalTrackingRegion.cfi"
+    using RegionPSetBlock
   }
 
   PSet OrderedHitsFactoryPSet = {
     string ComponentName = "StandardHitTripletGenerator"
     string SeedingLayers = "PixelLayerTriplets"
-    include "RecoPixelVertexing/PixelTriplets/data/PixelTripletHLTGenerator.cfi"
+    using GeneratorPSetBlock
   }
 
   PSet   FitterPSet = { using PixelFitterByHelixProjections }
