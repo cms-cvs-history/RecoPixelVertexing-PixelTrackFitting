@@ -1,4 +1,0 @@
-block PixelFitterByConformalMappingAndLine = {
-    string ComponentName = "PixelFitterByConformalMappingAndLine"
-    string TTRHBuilder = "PixelTTRHBuilderWithoutAngle"
-}
