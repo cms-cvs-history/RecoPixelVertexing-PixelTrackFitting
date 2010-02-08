@@ -3,7 +3,6 @@
 
 #include "FWCore/Framework/interface/EventSetup.h"
 #include "FWCore/Framework/interface/ESHandle.h"
-#include "Geometry/Records/interface/TrackerDigiGeometryRecord.h"
 #include "Geometry/TrackerGeometryBuilder/interface/TrackerGeometry.h"
 
 #include "DataFormats/GeometryVector/interface/LocalPoint.h"
@@ -17,16 +16,13 @@
 #include "RecoTracker/TkMSParametrization/interface/PixelRecoUtilities.h"
 
 #include "MagneticField/Engine/interface/MagneticField.h"
-#include "MagneticField/Records/interface/IdealMagneticFieldRecord.h"
 #include "TrackingTools/TransientTrackingRecHit/interface/TransientTrackingRecHitBuilder.h"
-#include "TrackingTools/Records/interface/TransientRecHitRecord.h"
 
 #include "CommonTools/Statistics/interface/LinearFit.h"
 #include "DataFormats/GeometryCommonDetAlgo/interface/Measurement1D.h"
 
 #include "Geometry/CommonDetUnit/interface/GeomDetUnit.h"
 #include "Geometry/CommonDetUnit/interface/GeomDetType.h"
-#include "FWCore/Framework/interface/ESWatcher.h"
 
 
 #include "FWCore/MessageLogger/interface/MessageLogger.h"
@@ -39,7 +35,8 @@ using namespace std;
 
 PixelFitterByHelixProjections::PixelFitterByHelixProjections(
    const edm::ParameterSet& cfg) 
- : theConfig(cfg), theTracker(0), theField(0), theTTRecHitBuilder(0) { }
+ : theConfig(cfg), theTracker(0), theField(0), theTTRecHitBuilder(0)
+    { }
 
 reco::Track* PixelFitterByHelixProjections::run(
     const edm::EventSetup& es,
@@ -53,22 +50,19 @@ reco::Track* PixelFitterByHelixProjections::run(
   vector<GlobalError> errors;
   vector<bool> isBarrel;
   
-  static edm::ESWatcher<TrackerDigiGeometryRecord> watcherTrackerDigiGeometryRecord;
-  if (!theTracker || watcherTrackerDigiGeometryRecord.check(es)) {
+  if (watcherTrackerDigiGeometryRecord.check(es) || !theTracker) {
     edm::ESHandle<TrackerGeometry> trackerESH;
     es.get<TrackerDigiGeometryRecord>().get(trackerESH);
     theTracker = trackerESH.product();
   }
 
-  static edm::ESWatcher<IdealMagneticFieldRecord>  watcherIdealMagneticFieldRecord;
-  if (!theField || watcherIdealMagneticFieldRecord.check(es)) {
+  if (watcherIdealMagneticFieldRecord.check(es) || !theField ) {
     edm::ESHandle<MagneticField> fieldESH;
     es.get<IdealMagneticFieldRecord>().get(fieldESH);
     theField = fieldESH.product();
   }
 
-  static edm::ESWatcher<TransientRecHitRecord> watcherTransientRecHitRecord;
-  if (!theTTRecHitBuilder || watcherTransientRecHitRecord.check(es)) {
+  if (watcherTransientRecHitRecord.check(es) || !theTTRecHitBuilder) {
     edm::ESHandle<TransientTrackingRecHitBuilder> ttrhbESH;
     std::string builderName = theConfig.getParameter<std::string>("TTRHBuilder");
     es.get<TransientRecHitRecord>().get(builderName,ttrhbESH);

@@ -8,6 +8,12 @@
 #include "DataFormats/TrackReco/interface/Track.h"
 #include "FWCore/ParameterSet/interface/ParameterSet.h"
 
+#include "FWCore/Framework/interface/ESWatcher.h"
+#include "MagneticField/Records/interface/IdealMagneticFieldRecord.h"
+#include "TrackingTools/Records/interface/TransientRecHitRecord.h"
+#include "Geometry/Records/interface/TrackerDigiGeometryRecord.h"
+
+
 #include <vector>
 
 //namespace edm {class ParameterSet;}
@@ -40,6 +46,10 @@ private:
   mutable const TrackerGeometry * theTracker;
   mutable const MagneticField * theField;
   mutable const TransientTrackingRecHitBuilder * theTTRecHitBuilder;
+  mutable edm::ESWatcher<TrackerDigiGeometryRecord> watcherTrackerDigiGeometryRecord;
+  mutable edm::ESWatcher<IdealMagneticFieldRecord>  watcherIdealMagneticFieldRecord;
+  mutable edm::ESWatcher<TransientRecHitRecord> watcherTransientRecHitRecord;
+ 
 
 };
 #endif
