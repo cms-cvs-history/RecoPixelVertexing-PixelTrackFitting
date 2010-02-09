@@ -8,6 +8,12 @@
 #include "DataFormats/TrackReco/interface/Track.h"
 #include "FWCore/ParameterSet/interface/ParameterSet.h"
 
+#include "FWCore/Framework/interface/ESWatcher.h"
+#include "MagneticField/Records/interface/IdealMagneticFieldRecord.h"
+#include "TrackingTools/Records/interface/TransientRecHitRecord.h"
+#include "Geometry/Records/interface/TrackerDigiGeometryRecord.h"
+
+
 #include <vector>
 
 //namespace edm {class ParameterSet;}
@@ -29,7 +35,7 @@ private:
   float cotTheta(const GlobalPoint& pinner, const GlobalPoint& pouter) const;
   float phi(float xC, float yC, int charge) const;
   float pt(float curvature) const;
-  float zip(float d0, float curv, 
+  float zip(float d0, float phi_p, float curv, 
     const GlobalPoint& pinner, const GlobalPoint& pouter) const;
   double errZip2(float apt, float eta) const;
   double errTip2(float apt, float eta) const;
@@ -40,6 +46,10 @@ private:
   mutable const TrackerGeometry * theTracker;
   mutable const MagneticField * theField;
   mutable const TransientTrackingRecHitBuilder * theTTRecHitBuilder;
+  mutable edm::ESWatcher<TrackerDigiGeometryRecord> watcherTrackerDigiGeometryRecord;
+  mutable edm::ESWatcher<IdealMagneticFieldRecord>  watcherIdealMagneticFieldRecord;
+  mutable edm::ESWatcher<TransientRecHitRecord> watcherTransientRecHitRecord;
+ 
 
 };
 #endif
