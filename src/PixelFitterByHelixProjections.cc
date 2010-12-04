@@ -82,8 +82,13 @@ namespace {
     double phi2 = std::sqrt(r2s)*(curv*0.5f)*(1.f+r2s*(rho2/24.f));
     double z1 = pinner.z();
     double z2 = pouter.z();
-    
-    return z1 - phi1/(phi1-phi2)*(z1-z2);
+
+    if (fabs(curv)>1.e-5) 
+      return z1 - phi1/(phi1-phi2)*(z1-z2);
+    else {
+      double dr = std::max(std::sqrt(r2s)-std::sqrt(r1s),1.e-5f);
+      return z1-std::sqrt(r1s)*(z2-z1)/dr;
+    }
   }
   
   double errZip( float apt, float eta) {
@@ -201,19 +206,27 @@ reco::Track* PixelFitterByHelixProjections::run(
         CircleFromThreePoints( GlobalPoint(0.,0.,0.), points[0], points[1]) :
         CircleFromThreePoints(points[0],points[1],points[2]); 
 
+  float valPhi, valTip, valPt;
+
   int iCharge = charge(points);
   float curvature = circle.curvature();
 
-  float invPt = PixelRecoUtilities::inversePt( circle.curvature(), es);
-  float valPt = (invPt > 1.e-4f) ? 1.f/invPt : 1.e4f;
+  if (curvature > 1.e-4) {
+    float invPt = PixelRecoUtilities::inversePt( circle.curvature(), es);
+    valPt = (invPt > 1.e-4f) ? 1.f/invPt : 1.e4f;
+    CircleFromThreePoints::Vector2D center = circle.center();
+    valTip = iCharge * (center.mag()-1.f/curvature);
+    valPhi = phi(center.x(), center.y(), iCharge);
+  } 
+  else {
+    valPt = 1.e4f; 
+    GlobalVector direction(points[1]-points[0]);
+    valPhi =  direction.phi(); 
+    valTip = -points[0].x()*sin(valPhi) + points[0].y()*cos(valPhi); 
+  }
+
   float errPt = 0.055f*valPt + 0.017f*valPt*valPt;
-
-  CircleFromThreePoints::Vector2D center = circle.center();
-  float valTip = iCharge * (center.mag()-1.f/curvature);
-
   float errValTip = errTip(valPt, points.back().eta());
-
-  float valPhi = phi(center.x(), center.y(), iCharge);
   float errPhi = 0.002f;
 
   float valZip = zip(valTip, valPhi, curvature, points[0],points[1]);
