@@ -22,6 +22,7 @@
 <use   name="TrackingTools/TrajectoryParametrization"/>
 <use   name="TrackingTools/TrajectoryState"/>
 <use   name="TrackingTools/TransientTrackingRecHit"/>
+<use   name="RecoPixelVertexing/PixelTriplets"/>
 <use   name="RecoTracker/TransientTrackingRecHit"/>
 <export>
   <lib   name="1"/>
