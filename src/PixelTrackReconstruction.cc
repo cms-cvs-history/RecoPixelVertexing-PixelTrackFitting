@@ -99,7 +99,6 @@ void PixelTrackReconstruction::run(TracksWithTTRHs& tracks, edm::Event& ev, cons
   Regions regions = theRegionProducer->regions(ev,es);
 
 
-
   for (IR ir=regions.begin(), irEnd=regions.end(); ir < irEnd; ++ir) {
     const TrackingRegion & region = **ir;
 
@@ -111,6 +110,9 @@ void PixelTrackReconstruction::run(TracksWithTTRHs& tracks, edm::Event& ev, cons
     const std::vector<SeedingHitSet> quadruplets = theMerger_->mergeTriplets( triplets, es );
 
     // producing tracks
+
+    unsigned int nQuad=quadruplets.size();
+    tracks.reserve(tracks.size()+nQuad);
     for( std::vector<SeedingHitSet >::const_iterator qIt = quadruplets.begin();
     	 qIt < quadruplets.end(); ++qIt ) {
 
@@ -119,9 +121,9 @@ void PixelTrackReconstruction::run(TracksWithTTRHs& tracks, edm::Event& ev, cons
       const SeedingHitSet& quadruplet = (*qIt);
 
       std::vector<const TrackingRecHit *> hits;
-
-      for (unsigned int iHit = 0, nHits = quadruplet.size(); iHit < nHits; ++iHit) {
-	hits.push_back( quadruplet[iHit]->hit() );
+      unsigned int nHit=quadruplet.size();
+      for (unsigned int iHit = 0;  iHit < 4; ++iHit) {
+	hits.push_back(quadruplet[iHit]->hit());
       }
     
       // fitting
