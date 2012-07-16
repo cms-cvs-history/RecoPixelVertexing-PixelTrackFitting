@@ -3,7 +3,7 @@
 
 #include "FWCore/ParameterSet/interface/ParameterSet.h"
 #include "RecoPixelVertexing/PixelTrackFitting/interface/TracksWithHits.h"
-#include "RecoPixelVertexing/PixelTriplets/interface/QuadrupletSeedMerger.h"
+#include "RecoPixelVertexing/PixelTriplets/plugins/QuadrupletSeedMerger.h"
 
 class PixelFitter;
 class PixelTrackCleaner;
